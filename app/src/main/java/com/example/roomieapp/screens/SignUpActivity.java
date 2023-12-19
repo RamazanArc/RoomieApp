@@ -20,14 +20,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private TextView haveAccount;
     private FirebaseAuth mAuth;
-    private EditText userName,userEmail,userPassword,confirmPassword;
+    private EditText userName, userEmail, userPassword, confirmPassword;
     private AppCompatButton signUpButton;
     private DatabaseReference mRef;
 
@@ -44,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.sign_up_button);
 
         mAuth = FirebaseAuth.getInstance();
-        mRef = FirebaseDatabase.getInstance().getReference();
 
         haveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,21 +59,21 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userName.getText().toString().trim().isEmpty()){
-                    Toast.makeText(SignUpActivity.this,"Adınızı Giriniz", Toast.LENGTH_SHORT).show();
+                if (userName.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(SignUpActivity.this, "Adınızı Giriniz", Toast.LENGTH_SHORT).show();
                 } else if (userEmail.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(SignUpActivity.this,"Geçerli Bir Mail Giriniz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Geçerli Bir Mail Giriniz", Toast.LENGTH_SHORT).show();
                 } else if (userPassword.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(SignUpActivity.this,"Şifre Giriniz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Şifre Giriniz", Toast.LENGTH_SHORT).show();
                 } else if (!userPassword.getText().toString().trim().equals(confirmPassword.getText().toString().trim())) {
-                    Toast.makeText(SignUpActivity.this,"Şifreler Uyuşmuyor", Toast.LENGTH_SHORT).show();
-                }else {
-                    if (emailChecker(userEmail.getText().toString().trim())){
+                    Toast.makeText(SignUpActivity.this, "Şifreler Uyuşmuyor", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (emailChecker(userEmail.getText().toString().trim())) {
                         createUser(userEmail.getText().toString().trim(),
                                 userPassword.getText().toString().trim(),
                                 userName.getText().toString().trim());
-                    }else {
-                        Toast.makeText(SignUpActivity.this,"Geçerli Bir Mail Giriniz", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Geçerli Bir Mail Giriniz", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -80,35 +82,43 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    boolean emailChecker(String email){
+    boolean emailChecker(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    void createUser(String email, String password, String name){
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+    void createUser(String email, String password, String name) {
+        mAuth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            String userId = firebaseUser.getUid();
 
-                User user = new User(name,email);
+                            mRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-                if (task.isSuccessful()){
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("userID", userId);
+                            hashMap.put("name", name);
+                            hashMap.put("image","default");
+                            hashMap.put("email",email);
 
-                    //Veriyi otomatik oluşturulan key ile database'e kaydediyor
-                    //push() fonksiyonu otomatik key oluşumu için kullanılıyor
-                    mRef.child("users").push().setValue(user);
-                    startActivity(new Intent(SignUpActivity.this,HomeActivity.class));
-                    finish();
-                    Toast.makeText(SignUpActivity.this,"Kullanıcı Başarılı Bir Şekilde Oluşturuldu ",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(SignUpActivity.this,"Hata",Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignUpActivity.this,"Hata",Toast.LENGTH_SHORT).show();
-            }
-        });
+                            mRef.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            });
+                        }else {
+                            Toast.makeText(SignUpActivity.this, "Kayıt olma başarısız", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
-
 }

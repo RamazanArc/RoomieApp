@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,8 +13,10 @@ import com.example.roomieapp.fragments.AccountFragment;
 import com.example.roomieapp.fragments.ChatFragment;
 import com.example.roomieapp.fragments.FavouriteFragment;
 import com.example.roomieapp.fragments.HomeFragment;
+import com.example.roomieapp.fragments.UsersFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -42,6 +45,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
             fragment = new ChatFragment();
         } else if (itemId == R.id.menu_account) {
             fragment = new AccountFragment();
+        }else if (itemId == R.id.logaout_account){
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
         }
 
         return loadFragment(fragment);

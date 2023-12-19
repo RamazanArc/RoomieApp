@@ -8,7 +8,8 @@ public class Item {
     private String price;
     private String description;
     private String shortDescription;
-    private String image;
+    private String imageUrl;
+    private String currentUserID;
 
     public Item() {
 
@@ -20,20 +21,41 @@ public class Item {
         this.shortDescription = shortDescription;
     }
 
-    public Item(String location, String price, String description, String shortDescription, String image) {
+    public Item(String location, String price, String description, String shortDescription, String imageUrl,String currentUserID) {
         this.location = location;
         this.price = price;
         this.description = description;
         this.shortDescription = shortDescription;
-        this.image = image;
+        this.imageUrl = imageUrl;
+        this.currentUserID = currentUserID;
     }
 
-    public String getImage() {
-        return image;
+    public Item(String description, String shortDescription, String price, String location) {
+        this.location = location;
+        this.price = price;
+        this.description = description;
+        this.shortDescription = shortDescription;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public String getCurrentUserID() {
+        return currentUserID;
+    }
+
+    public void setCurrentUserID(String currentUserID) {
+        this.currentUserID = currentUserID;
+    }
+
+    public Item(String imageUrl)
+    {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getLocation() {
@@ -67,5 +89,4 @@ public class Item {
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
-
 }

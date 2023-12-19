@@ -1,6 +1,8 @@
 package com.example.roomieapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.roomieapp.R;
 import com.example.roomieapp.listeners.ItemListener;
 import com.example.roomieapp.model.Item;
+import com.example.roomieapp.screens.MessageActivity;
 
 import java.util.List;
 
@@ -36,20 +39,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.top_deals,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.top_deals,parent,false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.price.setText(itemList.get(position).getPrice()+"₺");
+        holder.price.setText("İletişime Geç");
         holder.location.setText(itemList.get(position).getLocation());
         holder.shortDescription.setText(itemList.get(position).getShortDescription());
         Glide.with(context)
-                .load(itemList.get(position).getImage())
+                .load(itemList.get(position).getImageUrl())
                 .centerCrop()
                 .placeholder(R.drawable.ic_account)
                 .into(new CustomTarget<Drawable>() {
@@ -63,6 +65,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                     }
                 });
+        holder.price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MessageActivity.class);
+                intent.putExtra("currentUserID",itemList.get(position).getCurrentUserID());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

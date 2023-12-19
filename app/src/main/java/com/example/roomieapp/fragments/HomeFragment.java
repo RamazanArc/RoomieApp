@@ -5,13 +5,17 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +25,10 @@ import com.example.roomieapp.listeners.ItemListener;
 import com.example.roomieapp.model.Item;
 import com.example.roomieapp.model.User;
 import com.example.roomieapp.screens.DetailsActivity;
+import com.example.roomieapp.screens.LoginActivity;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +50,7 @@ public class HomeFragment extends Fragment implements ItemListener {
     private CircleImageView profileImage;
     private TextView username;
     private DatabaseReference ref;
+    FirebaseUser firebaseUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,36 +67,21 @@ public class HomeFragment extends Fragment implements ItemListener {
         profileImage = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.user_name);
 
-        ref = FirebaseDatabase.getInstance().getReference().child("users");
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        ref = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if(user != null){
-                    username.setText("Merhaba "+user.getName());
-                    Glide
-                            .with(getContext())
-                            .load(user.getImage())
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_account)
-                            .into(profileImage);
+                username.setText("Merhaba "+user.getName());
+                if (user.getImage().equals("default")){
+                    profileImage.setImageResource(R.mipmap.ic_launcher);
+                }else {
+                    Glide.with(getActivity().getApplicationContext()).load(user.getImage()).into(profileImage);
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
@@ -95,6 +89,45 @@ public class HomeFragment extends Fragment implements ItemListener {
 
             }
         });
+
+
+
+//        ref.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//                User user = snapshot.getValue(User.class);
+//                if(user != null){
+//                    username.setText("Merhaba "+user.getName());
+//                    Glide
+//                            .with(getContext())
+//                            .load(user.getImage())
+//                            .centerCrop()
+//                            .placeholder(R.drawable.ic_account)
+//                            .into(profileImage);
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
 
         itemList = new ArrayList<>();
@@ -109,7 +142,8 @@ public class HomeFragment extends Fragment implements ItemListener {
                                     Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString()
+                                    Objects.requireNonNull(dataSnapshot.child("imageUrl").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("currentUserID").getValue()).toString()
                             ));
                         }
                         adapter.notifyDataSetChanged();
@@ -135,8 +169,9 @@ public class HomeFragment extends Fragment implements ItemListener {
         intent.putExtra("location",itemList.get(position).getLocation());
         intent.putExtra("description",itemList.get(position).getDescription());
         intent.putExtra("shortDescription",itemList.get(position).getShortDescription());
-        intent.putExtra("image",itemList.get(position).getImage());
+        intent.putExtra("imageUrl",itemList.get(position).getImageUrl());
 
         startActivity(intent);
     }
+
 }

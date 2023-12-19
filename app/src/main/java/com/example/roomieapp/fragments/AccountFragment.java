@@ -31,6 +31,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -52,6 +53,7 @@ public class AccountFragment extends Fragment {
     private Uri uri;
     private String id;
     private DatabaseReference reference;
+    private FirebaseUser firebaseUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,38 +71,19 @@ public class AccountFragment extends Fragment {
         userEmail = view.findViewById(R.id.user_email);
         updateButton = view.findViewById(R.id.update_button);
 
-        ref = FirebaseDatabase.getInstance().getReference().child("users");
-        ref.addChildEventListener(new ChildEventListener() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        ref = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if(user != null){
-                    userName.setText(user.getName());
-                    userEmail.setText(user.getEmail());
-                    id = snapshot.getKey();
-                    Glide
-                            .with(getContext())
-                            .load(user.getImage())
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_account)
-                            .into(userProfile);
+                userName.setText(user.getName());
+                userEmail.setText(user.getEmail());
+                if (user.getImage().equals("default")){
+                    userProfile.setImageResource(R.mipmap.ic_launcher);
+                }else {
+                    Glide.with(getActivity().getApplicationContext()).load(user.getImage()).into(userProfile);
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
@@ -158,10 +141,11 @@ public class AccountFragment extends Fragment {
                         Map<String,String> map = new HashMap<>();
                         map.put("name",userName.getText().toString().trim());
                         map.put("email",userEmail.getText().toString().trim());
+                        map.put("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
                         if (uri != null){
                             map.put("image",uri.toString());
                         }
-                        reference = FirebaseDatabase.getInstance().getReference().child("users").child(id);
+                        reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
                         reference.setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -173,7 +157,7 @@ public class AccountFragment extends Fragment {
                                                 if (task.isComplete()){
 
                                                     Toast.makeText(getContext(), "Başarılı", Toast.LENGTH_SHORT).show();
-                                                    
+
                                                 }else {
                                                     Toast.makeText(getContext(), "Hata", Toast.LENGTH_SHORT).show();
                                                 }

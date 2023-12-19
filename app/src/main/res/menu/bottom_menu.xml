@@ -16,5 +16,8 @@
     <item android:icon="@drawable/ic_account"
         android:id="@+id/menu_account"
         android:title="Account"/>
+    <item android:icon="@drawable/logout_ic"
+        android:id="@+id/logaout_account"
+        android:title="LogOut"/>
 
 </menu>

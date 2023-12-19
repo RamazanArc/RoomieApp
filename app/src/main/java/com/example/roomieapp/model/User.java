@@ -4,15 +4,35 @@ public class User {
     private String name;
     private String email;
     private String image;
+    private String staus;
+    private String userID;
+
+    public String getStaus() {
+        return staus;
+    }
+
+    public void setStaus(String staus) {
+        this.staus = staus;
+    }
 
     public User(){
 
     }
 
 
-    public User(String name, String email) {
+    public User(String name, String email, String userID,String staus) {
         this.name = name;
         this.email = email;
+        this.userID = userID;
+        this.staus = staus;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getName() {
