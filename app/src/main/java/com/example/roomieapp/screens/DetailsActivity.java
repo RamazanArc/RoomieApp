@@ -1,5 +1,6 @@
 package com.example.roomieapp.screens;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,17 +9,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.roomieapp.R;
 import com.example.roomieapp.model.Item;
 import com.example.roomieapp.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView price,shortDescription,description;
     private Button chatButton;
+    private String ilanID;
+    private DatabaseReference databaseReference;
 
     String des, sDes, pri, img;
 
@@ -26,6 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        databaseReference = FirebaseDatabase.getInstance().getReference("images");
 
         imageView = findViewById(R.id.imageView);
         price = findViewById(R.id.price);
@@ -45,17 +56,5 @@ public class DetailsActivity extends AppCompatActivity {
                 .load(img)
                 .centerCrop()
                 .into(imageView);
-
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Item item = new Item();
-                Intent intent = new Intent(getApplicationContext(),MessageActivity.class);
-//                intent.putExtra("currentUserID",item.getCurrentUserID());
-                startActivity(intent);
-            }
-        });
-
-
     }
 }

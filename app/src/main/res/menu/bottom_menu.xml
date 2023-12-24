@@ -9,15 +9,18 @@
         android:id="@+id/menu_chat"
         android:title="Chat"/>
 
-    <item android:icon="@drawable/ic_favorite"
+    <item android:icon="@drawable/add_deal_ic"
         android:id="@+id/menu_fav"
-        android:title="Favorite"/>
+        android:title="Add Deal"/>
 
     <item android:icon="@drawable/ic_account"
         android:id="@+id/menu_account"
         android:title="Account"/>
-    <item android:icon="@drawable/logout_ic"
-        android:id="@+id/logaout_account"
-        android:title="LogOut"/>
+<!--    <item android:icon="@drawable/logout_ic"-->
+<!--        android:id="@+id/logaout_account"-->
+<!--        android:title="LogOut"/>-->
+    <item android:icon="@drawable/ic_my_deals"
+        android:id="@+id/my_deals"
+        android:title="Your Deals"/>
 
 </menu>

@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.roomieapp.R;
 import com.example.roomieapp.adapters.UserAdapter;
-import com.example.roomieapp.model.Chat;
+
 import com.example.roomieapp.model.Chatlist;
 import com.example.roomieapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -92,8 +91,6 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-
         return view;
     }
 

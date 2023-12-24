@@ -89,47 +89,6 @@ public class HomeFragment extends Fragment implements ItemListener {
 
             }
         });
-
-
-
-//        ref.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//                User user = snapshot.getValue(User.class);
-//                if(user != null){
-//                    username.setText("Merhaba "+user.getName());
-//                    Glide
-//                            .with(getContext())
-//                            .load(user.getImage())
-//                            .centerCrop()
-//                            .placeholder(R.drawable.ic_account)
-//                            .into(profileImage);
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
-
         itemList = new ArrayList<>();
 
         FirebaseDatabase.getInstance().getReference().child("images")
@@ -138,12 +97,13 @@ public class HomeFragment extends Fragment implements ItemListener {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                             itemList.add(new Item(
-                                    Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("description").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("shortDescription").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("price").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("location").getValue()).toString(),
+                                    Objects.requireNonNull(dataSnapshot.child("currentUserID").getValue()).toString(),
                                     Objects.requireNonNull(dataSnapshot.child("imageUrl").getValue()).toString(),
-                                    Objects.requireNonNull(dataSnapshot.child("currentUserID").getValue()).toString()
+                                    Objects.requireNonNull(dataSnapshot.child("ilanID").getValue()).toString()
                             ));
                         }
                         adapter.notifyDataSetChanged();
@@ -170,6 +130,7 @@ public class HomeFragment extends Fragment implements ItemListener {
         intent.putExtra("description",itemList.get(position).getDescription());
         intent.putExtra("shortDescription",itemList.get(position).getShortDescription());
         intent.putExtra("imageUrl",itemList.get(position).getImageUrl());
+        intent.putExtra("ilanID",itemList.get(position).getIlanID());
 
         startActivity(intent);
     }

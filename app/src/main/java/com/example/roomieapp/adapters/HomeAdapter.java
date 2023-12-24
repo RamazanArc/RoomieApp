@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,8 @@ import com.example.roomieapp.R;
 import com.example.roomieapp.listeners.ItemListener;
 import com.example.roomieapp.model.Item;
 import com.example.roomieapp.screens.MessageActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -68,9 +71,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MessageActivity.class);
-                intent.putExtra("currentUserID",itemList.get(position).getCurrentUserID());
-                context.startActivity(intent);
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (itemList.get(position).getCurrentUserID().equals(firebaseUser.getUid())){
+                    Toast.makeText(context, "Kendinize mesaj atamazsınız", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Intent intent = new Intent(context, MessageActivity.class);
+                    intent.putExtra("currentUserID",itemList.get(position).getCurrentUserID());
+                    context.startActivity(intent);
+                }
+
             }
         });
     }

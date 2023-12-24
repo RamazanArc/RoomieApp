@@ -10,6 +10,25 @@ public class Item {
     private String shortDescription;
     private String imageUrl;
     private String currentUserID;
+    private String ilanID;
+
+    public String getIlanID() {
+        return ilanID;
+    }
+
+    public void setIlanID(String ilanID) {
+        this.ilanID = ilanID;
+    }
+
+    public Item(String description, String shortDescription, String price, String location, String currentUserID, String imageUrl,String ilanID) {
+        this.location = location;
+        this.price = price;
+        this.description = description;
+        this.shortDescription = shortDescription;
+        this.currentUserID = currentUserID;
+        this.imageUrl = imageUrl;
+        this.ilanID = ilanID;
+    }
 
     public Item() {
 
@@ -19,15 +38,6 @@ public class Item {
         this.location = location;
         this.price = price;
         this.shortDescription = shortDescription;
-    }
-
-    public Item(String location, String price, String description, String shortDescription, String imageUrl,String currentUserID) {
-        this.location = location;
-        this.price = price;
-        this.description = description;
-        this.shortDescription = shortDescription;
-        this.imageUrl = imageUrl;
-        this.currentUserID = currentUserID;
     }
 
     public Item(String description, String shortDescription, String price, String location) {

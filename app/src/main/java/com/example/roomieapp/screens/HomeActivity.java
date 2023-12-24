@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import com.example.roomieapp.R;
 import com.example.roomieapp.fragments.AccountFragment;
 import com.example.roomieapp.fragments.ChatFragment;
-import com.example.roomieapp.fragments.FavouriteFragment;
+import com.example.roomieapp.fragments.AddDealFragment;
 import com.example.roomieapp.fragments.HomeFragment;
-import com.example.roomieapp.fragments.UsersFragment;
+import com.example.roomieapp.fragments.MyDealsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         loadFragment(new HomeFragment());
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -40,15 +41,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationBarView
         if (itemId == R.id.menu_home) {
             fragment = new HomeFragment();
         } else if (itemId == R.id.menu_fav) {
-            fragment = new FavouriteFragment();
+            fragment = new AddDealFragment();
         } else if (itemId == R.id.menu_chat) {
             fragment = new ChatFragment();
         } else if (itemId == R.id.menu_account) {
             fragment = new AccountFragment();
-        }else if (itemId == R.id.logaout_account){
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+//        }else if (itemId == R.id.logaout_account){
+//            FirebaseAuth.getInstance().signOut();
+//            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+//            finish();
+        } else if (itemId == R.id.my_deals) {
+            fragment = new MyDealsFragment();
         }
 
         return loadFragment(fragment);
