@@ -56,6 +56,18 @@
         app:layout_constraintEnd_toEndOf="@+id/user_email"
         app:layout_constraintStart_toStartOf="@+id/user_email"
         app:layout_constraintTop_toBottomOf="@id/user_email" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_bg"
+        android:text="Çıkış Yap"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/update_button"
+        app:layout_constraintStart_toStartOf="@+id/update_button"
+        app:layout_constraintTop_toBottomOf="@id/update_button" />
 
 
 

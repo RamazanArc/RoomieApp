@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -16,7 +16,7 @@ import com.example.roomieapp.fragments.HomeFragment;
 import com.example.roomieapp.fragments.MyDealsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 public class HomeActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 

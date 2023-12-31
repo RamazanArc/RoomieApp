@@ -2,6 +2,8 @@ package com.example.roomieapp.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.roomieapp.R;
 import com.example.roomieapp.model.User;
+import com.example.roomieapp.screens.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +50,7 @@ public class AccountFragment extends Fragment {
 
     private CircleImageView userProfile;
     private EditText userName,userEmail;
-    private AppCompatButton updateButton;
+    private AppCompatButton updateButton, logOutButton;
     private DatabaseReference ref;
     private int Pick_Image = 1;
     private Uri uri;
@@ -70,6 +73,7 @@ public class AccountFragment extends Fragment {
         userName = view.findViewById(R.id.user_name);
         userEmail = view.findViewById(R.id.user_email);
         updateButton = view.findViewById(R.id.update_button);
+        logOutButton = view.findViewById(R.id.logout_button);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
@@ -109,6 +113,14 @@ public class AccountFragment extends Fragment {
                 uploadImage();
             }
         });
+
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alertDialog = createDialog();
+                alertDialog.show();
+            }
+        });
     }
 
     @Override
@@ -123,6 +135,25 @@ public class AccountFragment extends Fragment {
                 userProfile.setImageURI(uri);
             }
         }
+    }
+    AlertDialog createDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Çıkış Yapmak İstiyor Musunuz ?");
+        builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
+                getActivity().finish();
+            }
+        });
+        builder.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        return builder.create();
     }
 
     private void uploadImage() {

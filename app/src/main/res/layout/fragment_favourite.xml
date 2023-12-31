@@ -11,6 +11,15 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/add_deal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="İlan Ekle"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
 
         <EditText
             android:id="@+id/description"

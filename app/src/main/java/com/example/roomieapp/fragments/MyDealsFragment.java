@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.roomieapp.R;
+import com.example.roomieapp.adapters.DealAdapter;
 import com.example.roomieapp.adapters.HomeAdapter;
 import com.example.roomieapp.listeners.ItemListener;
 import com.example.roomieapp.model.Item;
@@ -32,7 +33,7 @@ import java.util.Objects;
 
 public class MyDealsFragment extends Fragment implements ItemListener {
     private RecyclerView recyclerView;
-    private HomeAdapter dealAdapter;
+    private DealAdapter dealAdapter;
     private List<Item> dealList;
 
     private DatabaseReference databaseReference;
@@ -73,7 +74,7 @@ public class MyDealsFragment extends Fragment implements ItemListener {
 
             }
         });
-        dealAdapter = new HomeAdapter(getContext(),dealList, this);
+        dealAdapter = new DealAdapter(getContext(),dealList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -92,6 +93,5 @@ public class MyDealsFragment extends Fragment implements ItemListener {
         intent.putExtra("ilanID",dealList.get(position).getIlanID());
 
         startActivity(intent);
-
     }
 }

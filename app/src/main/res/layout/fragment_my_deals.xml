@@ -20,7 +20,7 @@
                 android:id="@+id/my_deals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Your Deals"
+                android:text="İlanlarım"
                 android:textStyle="bold"
                 android:textSize="28sp"
                 android:layout_marginTop="16dp"
