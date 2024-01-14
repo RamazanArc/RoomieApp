@@ -13,6 +13,7 @@ import com.example.roomieapp.fragments.AccountFragment;
 import com.example.roomieapp.fragments.ChatFragment;
 import com.example.roomieapp.fragments.AddDealFragment;
 import com.example.roomieapp.fragments.HomeFragment;
+import com.example.roomieapp.fragments.MapFragment;
 import com.example.roomieapp.fragments.MyDealsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;

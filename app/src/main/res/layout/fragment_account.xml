@@ -43,6 +43,28 @@
         app:layout_constraintEnd_toEndOf="@+id/user_name"
         app:layout_constraintStart_toStartOf="@+id/user_name"
         app:layout_constraintTop_toBottomOf="@id/user_name" />
+    <EditText
+        android:id="@+id/current_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/edit_bg"
+        android:hint="Mevcut Şifrenizi Girin"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/user_email"
+        app:layout_constraintStart_toStartOf="@+id/user_email"
+        app:layout_constraintTop_toBottomOf="@id/user_email" />
+    <EditText
+        android:id="@+id/user_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/edit_bg"
+        android:hint="Yeni Şifre"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/current_password"
+        app:layout_constraintStart_toStartOf="@+id/current_password"
+        app:layout_constraintTop_toBottomOf="@id/current_password" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/update_button"

@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +32,7 @@ import com.example.roomieapp.model.Item;
 import com.example.roomieapp.screens.DetailsActivity;
 import com.example.roomieapp.screens.LoginActivity;
 import com.example.roomieapp.screens.MessageActivity;
+import com.example.roomieapp.screens.UpdateDealActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -67,6 +71,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull DealAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         holder.price.setText("İlanı Kaldır");
+        holder.update.setText("İlan Güncelle");
         holder.location.setText(itemList.get(position).getLocation());
         holder.shortDescription.setText(itemList.get(position).getShortDescription());
         Glide.with(context)
@@ -89,6 +94,21 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder>{
             public void onClick(View view) {
                 AlertDialog alertDialog = alertOfDealDelete(itemList.get(position).getIlanID());
                 alertDialog.show();
+            }
+        });
+
+        holder.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, UpdateDealActivity.class);
+                intent.putExtra("ilanID",itemList.get(position).getIlanID());
+                intent.putExtra("description",itemList.get(position).getDescription());
+                intent.putExtra("shortDescription",itemList.get(position).getShortDescription());
+                intent.putExtra("location",itemList.get(position).getLocation());
+                intent.putExtra("price",itemList.get(position).getPrice());
+                intent.putExtra("imageUrl",itemList.get(position).getImageUrl());
+                intent.putExtra("currentUserID",itemList.get(position).getCurrentUserID());
+                context.startActivity(intent);
             }
         });
     }
@@ -134,13 +154,14 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView price;
+        private TextView price,update;
         private TextView location;
         private TextView shortDescription;
         private RelativeLayout relativeLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            update = itemView.findViewById(R.id.update);
             price = itemView.findViewById(R.id.price);
             location = itemView.findViewById(R.id.location);
             shortDescription = itemView.findViewById(R.id.short_description);

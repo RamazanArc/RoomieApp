@@ -78,16 +78,6 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:text="asdasdasdasjdaskdjasdsajkdhasdjkhajdhakdhsajjk"/>
-    <Button
-        android:id="@+id/chat_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"
-        android:text="İletişime Geç"
-        android:backgroundTint="@color/black"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

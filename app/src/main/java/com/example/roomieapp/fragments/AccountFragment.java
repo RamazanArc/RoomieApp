@@ -27,6 +27,8 @@ import com.example.roomieapp.screens.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -49,7 +51,7 @@ public class AccountFragment extends Fragment {
 
 
     private CircleImageView userProfile;
-    private EditText userName,userEmail;
+    private EditText userName,userEmail,newPassword,currentPassword;
     private AppCompatButton updateButton, logOutButton;
     private DatabaseReference ref;
     private int Pick_Image = 1;
@@ -72,6 +74,8 @@ public class AccountFragment extends Fragment {
         userProfile = view.findViewById(R.id.profile_image);
         userName = view.findViewById(R.id.user_name);
         userEmail = view.findViewById(R.id.user_email);
+        newPassword = view.findViewById(R.id.user_password);
+        currentPassword = view.findViewById(R.id.current_password);
         updateButton = view.findViewById(R.id.update_button);
         logOutButton = view.findViewById(R.id.logout_button);
 
@@ -110,7 +114,8 @@ public class AccountFragment extends Fragment {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadImage();
+                uploadImage(currentPassword.getText().toString(),newPassword.getText().toString());
+               // updatePassword(currentPassword.getText().toString(),newPassword.getText().toString());
             }
         });
 
@@ -156,7 +161,9 @@ public class AccountFragment extends Fragment {
         return builder.create();
     }
 
-    private void uploadImage() {
+    private void uploadImage(String currentPassWord, String newPassword) {
+       // updateEmail(currentPassWord,newEmail);
+        updatePassword(currentPassWord,newPassword);
 
         StorageReference ref = FirebaseStorage.getInstance()
                 .getReference().child("images/"+ UUID.randomUUID().toString());
@@ -177,29 +184,76 @@ public class AccountFragment extends Fragment {
                             map.put("image",uri.toString());
                         }
                         reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-                        reference.setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                      FirebaseAuth.getInstance().getCurrentUser()
-                                       .updateEmail(userEmail.getText().toString().trim())
-                                       .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isComplete()){
-
-                                                    Toast.makeText(getContext(), "Başarılı", Toast.LENGTH_SHORT).show();
-
-                                                }else {
-                                                    Toast.makeText(getContext(), "Hata", Toast.LENGTH_SHORT).show();
-                                                }
-                                           }
-                                       });
-                            }
-                        });
+                        reference.setValue(map);
                     }
                 });
             }
         });
 
     }
+
+    private void updatePassword(String currentPassword, String newPassword){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null && !newPassword.isEmpty()){
+            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(),currentPassword);
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                user.updatePassword(newPassword)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(getContext(), "Şifre güncellendi", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    Toast.makeText(getContext(), "Şifre güncelleme hatası", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            }else {
+                                Toast.makeText(getContext(), "Mevcut Şifre doğru değil", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }else {
+            Toast.makeText(getContext(), "Yeni şifre belirlenmemiş veye kullanıcı oturumu kapalı", Toast.LENGTH_SHORT).show();
+        }
+    }
+//    private void updateEmail(String currentPassword, String newEmail) {
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//
+//        if (user != null && !newEmail.isEmpty()) {
+//            // Kullanıcının mevcut şifresini doğrula
+//            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+//            user.reauthenticate(credential)
+//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                // Yeni e-posta adresini güncelle
+//                                user.updateEmail(newEmail)
+//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<Void> task) {
+//                                                if (task.isSuccessful()) {
+//                                                    Toast.makeText(getContext(), "E-posta adresi güncellendi.", Toast.LENGTH_SHORT).show();
+//                                                } else {
+//                                                    Toast.makeText(getContext(), "E-posta adresi güncellenirken hata oluştu.", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//                                        });
+//                            } else {
+//                                Toast.makeText(getContext(), "Mevcut şifrenizi doğrulayamıyoruz.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//        } else {
+//            Toast.makeText(getContext(), "Yeni e-posta belirlenmemiş veya kullanıcı oturumu açık değil.", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }

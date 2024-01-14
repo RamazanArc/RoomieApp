@@ -15,6 +15,14 @@ import com.bumptech.glide.Glide;
 import com.example.roomieapp.R;
 import com.example.roomieapp.model.Item;
 import com.example.roomieapp.model.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity{
 
     private ImageView imageView;
     private TextView price,shortDescription,description;
@@ -31,6 +39,8 @@ public class DetailsActivity extends AppCompatActivity {
     private String ilanID;
     private List<Item> itemList;
     private DatabaseReference databaseReference;
+    GoogleMap mGoogleMap;
+    MapView mMapView;
 
     String des, sDes, pri, img;
 
@@ -44,7 +54,12 @@ public class DetailsActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         shortDescription = findViewById(R.id.short_description);
         description = findViewById(R.id.description);
-        chatButton = findViewById(R.id.chat_button);
+//        mMapView = findViewById(R.id.map);
+//        if (mMapView != null){
+//            mMapView.onCreate(null);
+//            mMapView.onResume();
+//            mMapView.getMapAsync(this);
+//        }
 
         pri = getIntent().getStringExtra("price");
         des = getIntent().getStringExtra("description");
@@ -61,4 +76,20 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    public void onMapReady(@NonNull GoogleMap googleMap) {
+//        MapsInitializer.initialize(getApplicationContext());
+//
+//        Double latitude = 38.6075536;
+//        Double longitude = 27.0915555;
+//
+//
+//        mGoogleMap = googleMap;
+//        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//
+//        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("yerIsim").snippet("Here"));
+//
+//        CameraPosition Liberty = CameraPosition.builder().target(new LatLng(latitude, longitude)).zoom(16).bearing(0).tilt(45).build();
+//        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
+//    }
 }

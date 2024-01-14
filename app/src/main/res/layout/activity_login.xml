@@ -79,7 +79,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:hint="Password"
-                    android:inputType="numberPassword"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:background="@drawable/edit_bg"
