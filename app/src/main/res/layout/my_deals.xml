@@ -61,6 +61,27 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="16dp"
+            android:backgroundTint="@color/dark_orange"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/update"
+                android:textColor="@color/white"
+                android:text="1500 ₺"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
 
         </androidx.cardview.widget.CardView>
