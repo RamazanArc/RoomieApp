@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.example.roomieapp.model.Item;
 
 import com.example.roomieapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -87,7 +89,16 @@ public class AddDealFragment extends Fragment {
                                         String imageUrl = uri.toString();
                                         String dealKey = databaseReference.push().getKey();
                                         Item item = new Item(desc,shortDsc,prc,loc,currentUserId,imageUrl,dealKey);
-                                        databaseReference.child(dealKey).setValue(item);
+                                        databaseReference.child(dealKey).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(getContext(), "İlan Başarılı Bir Şekilde Eklendi", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    Toast.makeText(getContext(), "İlan Eklerken Bir Hata Oluştu", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 });
                               }

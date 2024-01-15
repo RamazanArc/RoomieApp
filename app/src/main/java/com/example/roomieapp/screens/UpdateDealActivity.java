@@ -14,11 +14,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.roomieapp.R;
 import com.example.roomieapp.model.Item;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -122,7 +125,16 @@ public class UpdateDealActivity extends AppCompatActivity {
                                     map.put("imageUrl",uri.toString());
                                 }
                                 reference = FirebaseDatabase.getInstance().getReference("images").child(ilanid);
-                                reference.setValue(map);
+                                reference.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                       if (task.isSuccessful()){
+                                           Toast.makeText(UpdateDealActivity.this, "İlan Güncellendi", Toast.LENGTH_SHORT).show();
+                                       }else {
+                                           Toast.makeText(UpdateDealActivity.this, "İlan Güncellenirken Bir Hata Oluştu", Toast.LENGTH_SHORT).show();
+                                       }
+                                    }
+                                });
                             }
                         });
                     }
