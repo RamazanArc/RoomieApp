@@ -3,24 +3,24 @@
 
     <item android:icon="@drawable/ic_home"
         android:id="@+id/menu_home"
-        android:title="Home"/>
+        android:title="Anasayfa"/>
 
     <item android:icon="@drawable/ic_chat"
         android:id="@+id/menu_chat"
-        android:title="Chat"/>
+        android:title="Mesaj Kutusu"/>
 
     <item android:icon="@drawable/add_deal_ic"
         android:id="@+id/menu_fav"
-        android:title="Add Deal"/>
+        android:title="İlan Ver"/>
 
     <item android:icon="@drawable/ic_account"
         android:id="@+id/menu_account"
-        android:title="Account"/>
+        android:title="Hesap"/>
 <!--    <item android:icon="@drawable/logout_ic"-->
 <!--        android:id="@+id/logaout_account"-->
 <!--        android:title="LogOut"/>-->
     <item android:icon="@drawable/ic_my_deals"
         android:id="@+id/my_deals"
-        android:title="Your Deals"/>
+        android:title="İlanlarım"/>
 
 </menu>

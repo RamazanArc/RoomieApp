@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment implements ItemListener {
 
         adapter = new HomeAdapter(getContext(),itemList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         topDealRV.setLayoutManager(linearLayoutManager);
         topDealRV.setAdapter(adapter);
 
